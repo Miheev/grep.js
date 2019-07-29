@@ -1,0 +1,41 @@
+{
+  "name": "grep.js",
+  "version": "1.0.0",
+  "description": "partially execute grep",
+  "main": "lib/main.js",
+  "types": "lib/main.d.ts",
+  "bin": {
+    "grep": "./bin/grep"
+  },
+  "scripts": {
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags"
+  },
+  "keywords": [
+    "grep",
+    "javascript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Miheev/grep.js.git"
+  },
+  "author": "smikheev",
+  "license": "ISC",
+  "bugs": "https://github.com/Miheev/grep.js/issues",
+  "homepage": "https://github.com/Miheev/grep.js#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^12.6.8",
+    "prettier": "^1.18.2",
+    "tslint": "^5.18.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.5.3"
+  }
+}

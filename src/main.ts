@@ -1,0 +1,18 @@
+import { InputFormatter } from './inputFormatter';
+import { outputLines } from './outputLines';
+import { PatternSearch } from './PatternSearch';
+
+// tslint:disable-next-line:no-unused-expression
+!async function() {
+  let input = new InputFormatter(process.argv.slice(2), process.stdin, process.exit);
+  await input.prepareData();
+
+  let searcher = new PatternSearch(input);
+  let results = searcher.findAll();
+
+  outputLines(results, input.pipes.output);
+
+  process.on('exit', () => {
+    input.destroy();
+  });
+}();
