@@ -1,3 +1,9 @@
+# App
+lib
+
+# Misc
+.directory
+
 # Logs
 logs
 *.log
