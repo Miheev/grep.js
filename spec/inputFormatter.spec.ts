@@ -23,9 +23,9 @@ describe('should format input before search will be started', () => {
   it('should destroy input formatter', () => {
     object.destroy();
 
-    expect(object.argv).toBeFalsy();
-    expect(object.stdin).toBeFalsy();
-    expect(object.exitFn).toBeFalsy();
+    expect(object['argv']).toBeFalsy();
+    expect(object['stdin']).toBeFalsy();
+    expect(object['exitFn']).toBeFalsy();
   });
 
 });

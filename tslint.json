@@ -16,6 +16,7 @@
       "trace"
     ],
     "only-arrow-functions": false,
-    "prefer-const": false
+    "prefer-const": false,
+    "no-string-literal": false
   }
 }
