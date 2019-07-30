@@ -25,9 +25,7 @@ export class InputFormatter {
        -n   output highlighted line numbers along with text lines
     `);
   }
-  argv: string[];
-  stdin: ReadStream;
-  exitFn: (code?: number) => void;
+
   supportedOptions: Map<string, PipeConfig>;
   keyword = '';
   options: string[] = [];
@@ -36,6 +34,10 @@ export class InputFormatter {
     output: [],
     pattern: [],
   };
+
+  private argv: string[];
+  private stdin: ReadStream;
+  private exitFn: (code?: number) => void;
 
   constructor(argv: string[], stdin: ReadStream, exitFn: (code?: number) => void) {
     this.argv = argv;
@@ -73,7 +75,7 @@ export class InputFormatter {
     return;
   }
 
-  fillPipes(): void {
+  private fillPipes(): void {
     let item: PipeConfig;
     this.options.forEach(option => {
       item = this.supportedOptions.get(option) as PipeConfig;
@@ -85,7 +87,7 @@ export class InputFormatter {
     }
   }
 
-  async transformParams(): Promise<undefined> {
+  private async transformParams(): Promise<undefined> {
     const isHelpMode = this.argv.find((arg) => arg === '--help');
     if (isHelpMode) {
       InputFormatter.HelpDetailedOutput();
@@ -117,11 +119,11 @@ export class InputFormatter {
     return;
   }
 
-  isOption(arg: string): boolean {
+  private isOption(arg: string): boolean {
     return arg[0] === '-';
   }
 
-  exit() {
+  private exit() {
     this.exitFn(0);
   }
 }

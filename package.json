@@ -10,7 +10,8 @@
   "scripts": {
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jasmine-ts --config=jasmine.json --project ./tsconfig.spec.json",
+    "test-covered": "nyc -r=lcov -r text -e .ts -x \"spec/*.spec.ts\" npm test",
     "build": "tsc",
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint",
@@ -20,7 +21,8 @@
   },
   "keywords": [
     "grep",
-    "javascript"
+    "javascript",
+    "typescript"
   ],
   "repository": {
     "type": "git",
@@ -32,8 +34,14 @@
   "homepage": "https://github.com/Miheev/grep.js#readme",
   "dependencies": {},
   "devDependencies": {
+    "@types/jasmine": "^3.3.16",
     "@types/node": "^12.6.8",
+    "jasmine": "^3.4.0",
+    "jasmine-spec-reporter": "^4.2.1",
+    "jasmine-ts": "^0.3.0",
+    "nyc": "^14.1.1",
     "prettier": "^1.18.2",
+    "ts-node": "^8.3.0",
     "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.5.3"

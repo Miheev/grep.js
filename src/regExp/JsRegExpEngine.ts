@@ -3,8 +3,9 @@ import { GrepLine, IRegExpEngine } from '../models';
 export class JsRegExpEngine implements IRegExpEngine {
   isInverse = false;
   flags = ['g'];
-  keyword = '';
-  pattern: RegExp | null = null;
+
+  private keyword = '';
+  private pattern: RegExp | null = null;
 
   constructor(keyword: string) {
     this.keyword = keyword;
