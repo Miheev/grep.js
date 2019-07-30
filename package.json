@@ -1,5 +1,5 @@
 {
-  "name": "grep.js",
+  "name": "@smikheev/grep.js",
   "version": "1.0.0",
   "description": "partially execute grep",
   "main": "lib/main.js",
