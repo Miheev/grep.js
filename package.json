@@ -13,6 +13,7 @@
     "test": "jasmine-ts --config=jasmine.json --project ./tsconfig.spec.json",
     "test-covered": "nyc -r=lcov -r text -e .ts -x \"spec/*.spec.ts\" npm test",
     "build": "tsc",
+    "publish-package": "npm publish --access public",
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
