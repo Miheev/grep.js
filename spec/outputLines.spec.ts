@@ -14,7 +14,7 @@ describe('should output results', () => {
   });
 
   it('should output with showLineNumber', () => {
-    let lines: GrepLine[] = [{index: 1, line: 'abc'}];
+    let lines: GrepLine[] = [{ index: 1, line: 'abc' }];
     let pipeline: PipeFuntion[] = [showLineNumber as PipeFuntion];
 
     outputLines(lines, pipeline);
@@ -33,8 +33,8 @@ describe('should output results', () => {
 
   it('should output defaults', () => {
     let lines: GrepLine[] = [
-      {index: 1, line: 'abcda Daefg DA', foundIndexList: [[3,5], [6,8], [12,14]]},
-      {index: 1, line: 'abcda Daefg DA ', foundIndexList: [[3,5], [6,8], [12,14]]},
+      { index: 1, line: 'abcda Daefg DA', foundIndexList: [[3, 5], [6, 8], [12, 14]] },
+      { index: 1, line: 'abcda Daefg DA ', foundIndexList: [[3, 5], [6, 8], [12, 14]] },
     ];
     let pipeline: PipeFuntion[] = [showMatchedLineList as PipeFuntion];
 
@@ -44,7 +44,7 @@ describe('should output results', () => {
   });
 
   it('should output matched line count', () => {
-    let lines: GrepLine[] = [{index: 1, line: 'abc'}];
+    let lines: GrepLine[] = [{ index: 1, line: 'abc' }];
     let pipeline: PipeFuntion[] = [showMatchCount as PipeFuntion, showLineNumber as PipeFuntion];
 
     outputLines(lines, pipeline);

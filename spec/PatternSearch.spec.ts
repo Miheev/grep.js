@@ -1,5 +1,5 @@
 import ReadStream = NodeJS.ReadStream;
-import { createReadStream } from "fs";
+import { createReadStream } from 'fs';
 import { InputFormatter } from '../src/inputFormatter';
 import { PatternSearch } from '../src/patternSearch';
 import { caseInsensitiveSearch, inverseSearch } from '../src/pipes/regExpPipes';

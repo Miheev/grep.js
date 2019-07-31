@@ -11,7 +11,7 @@ describe('should JsRegExpEngine run', () => {
 
   it('should thrown error on matchLine without pattern', () => {
     expect(function() {
-      object.matchLine({index: 0, line: 'xxx'});
+      object.matchLine({ index: 0, line: 'xxx' });
     }).toThrow();
   });
 });
