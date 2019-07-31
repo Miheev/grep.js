@@ -14,9 +14,7 @@ export function showLineNumber(resultList: GrepLine[], end: () => void): string[
 
 export function showMatchedLineList(resultList: GrepLine[], end: () => void): string[][] {
   end();
-  return resultList.map((resultLine) => {
-    return showMatchedLine(resultLine);
-  });
+  return resultList.map(showMatchedLine);
 }
 
 export function showMatchedLine(resultLine: GrepLine): string[] {

@@ -1,6 +1,6 @@
-import { PipeFuntion } from '../models';
+import { PipeFunction } from '../models';
 
-export function runPipeline(pipeList: Array<PipeFuntion>, params: unknown): unknown {
+export function runPipeline(pipeList: Array<PipeFunction>, params: unknown): unknown {
   let isFinished = false;
 
   function end(): void {

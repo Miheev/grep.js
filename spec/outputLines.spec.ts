@@ -1,4 +1,4 @@
-import { GrepLine, PipeFuntion } from '../src/models';
+import { GrepLine, PipeFunction } from '../src/models';
 import { outputLines } from '../src/outputLines';
 import { showLineNumber, showMatchCount, showMatchedLineList } from '../src/pipes/renderPipes';
 
@@ -15,7 +15,7 @@ describe('should output results', () => {
 
   it('should output with showLineNumber', () => {
     let lines: GrepLine[] = [{ index: 1, line: 'abc' }];
-    let pipeline: PipeFuntion[] = [showLineNumber as PipeFuntion];
+    let pipeline: PipeFunction[] = [showLineNumber as PipeFunction];
 
     outputLines(lines, pipeline);
 
@@ -24,7 +24,7 @@ describe('should output results', () => {
 
   it('should not output on empty results', () => {
     let lines: GrepLine[] = [];
-    let pipeline: PipeFuntion[] = [showLineNumber as PipeFuntion];
+    let pipeline: PipeFunction[] = [showLineNumber as PipeFunction];
 
     outputLines(lines, pipeline);
 
@@ -36,7 +36,7 @@ describe('should output results', () => {
       { index: 1, line: 'abcda Daefg DA', foundIndexList: [[3, 5], [6, 8], [12, 14]] },
       { index: 1, line: 'abcda Daefg DA ', foundIndexList: [[3, 5], [6, 8], [12, 14]] },
     ];
-    let pipeline: PipeFuntion[] = [showMatchedLineList as PipeFuntion];
+    let pipeline: PipeFunction[] = [showMatchedLineList as PipeFunction];
 
     outputLines(lines, pipeline);
 
@@ -45,7 +45,7 @@ describe('should output results', () => {
 
   it('should output matched line count', () => {
     let lines: GrepLine[] = [{ index: 1, line: 'abc' }];
-    let pipeline: PipeFuntion[] = [showMatchCount as PipeFuntion, showLineNumber as PipeFuntion];
+    let pipeline: PipeFunction[] = [showMatchCount as PipeFunction, showLineNumber as PipeFunction];
 
     outputLines(lines, pipeline);
 

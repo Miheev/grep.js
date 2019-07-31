@@ -9,4 +9,3 @@ export function inverseSearch(regExpEngine: IRegExpEngine, end: () => void): IRe
   regExpEngine.isInverse = true;
   return regExpEngine;
 }
-

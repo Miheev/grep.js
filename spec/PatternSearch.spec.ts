@@ -3,7 +3,7 @@ import { createReadStream } from 'fs';
 import { InputFormatter } from '../src/inputFormatter';
 import { PatternSearch } from '../src/patternSearch';
 import { caseInsensitiveSearch, inverseSearch } from '../src/pipes/regExpPipes';
-import { GrepLine, PipeFuntion } from '../src/models';
+import { GrepLine, PipeFunction } from '../src/models';
 
 const filePath = './spec/helpers/test-file.txt';
 
@@ -28,7 +28,7 @@ describe('should search by provided pattern', () => {
   });
 
   it('should init with pipes', () => {
-    input.pipes.pattern = [caseInsensitiveSearch as PipeFuntion, inverseSearch as PipeFuntion];
+    input.pipes.pattern = [caseInsensitiveSearch as PipeFunction, inverseSearch as PipeFunction];
 
     object = new PatternSearch(input);
 
@@ -49,7 +49,7 @@ describe('should search by provided pattern', () => {
   it('should find matches inverted and case-insensitive', () => {
     input.keyword = 'No';
     input.textLines = ['No ', 'Yes', 'xx no'];
-    input.pipes.pattern = [caseInsensitiveSearch as PipeFuntion, inverseSearch as PipeFuntion];
+    input.pipes.pattern = [caseInsensitiveSearch as PipeFunction, inverseSearch as PipeFunction];
 
     object = new PatternSearch(input);
     let results: GrepLine[] = object.findAll();

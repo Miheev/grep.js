@@ -27,11 +27,13 @@ export class PatternSearch {
     }
 
     let lineResult;
-    return this.input.textLines.map((line, index) => {
+    return this.input.textLines.reduce((resultList, line, index) => {
       lineResult = { line, index };
-      return this.regExpEngine.matchLine(lineResult);
-    })
-    .filter((result) => Boolean(result)) as GrepLine[];
+      if (this.regExpEngine.matchLine(lineResult)) {
+        resultList.push(lineResult);
+      }
+      return resultList;
+    }, [] as GrepLine[]);
   }
 
   private applyOptions(): void {

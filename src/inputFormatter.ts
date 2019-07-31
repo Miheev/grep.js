@@ -1,5 +1,5 @@
 import { inputFromCli, inputFromStdin } from './inputData';
-import { PipeConfig, PipeFuntion, PipeOrderedMap } from './models';
+import { PipeConfig, PipeFunction, PipeOrderedMap } from './models';
 import { caseInsensitiveSearch, inverseSearch } from './pipes/regExpPipes';
 import { showLineNumber, showMatchCount, showMatchedLineList } from './pipes/renderPipes';
 import ReadStream = NodeJS.ReadStream;
@@ -84,7 +84,7 @@ export class InputFormatter {
     });
 
     if (!this.pipes.output.length) {
-      this.pipes.output.push(showMatchedLineList as PipeFuntion);
+      this.pipes.output.push(showMatchedLineList as PipeFunction);
     }
   }
 

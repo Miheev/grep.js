@@ -7,6 +7,7 @@
   "bin": {
     "grep": "./bin/grep"
   },
+  "files": ["lib/**/*", "bin/grep"],
   "scripts": {
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
@@ -30,7 +31,7 @@
     "url": "git+https://github.com/Miheev/grep.js.git"
   },
   "author": "smikheev",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": "https://github.com/Miheev/grep.js/issues",
   "homepage": "https://github.com/Miheev/grep.js#readme",
   "engines": {
