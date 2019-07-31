@@ -19,6 +19,7 @@ export class JsRegExpEngine implements IRegExpEngine {
     if (!this.pattern) {
       throw Error('Pattern not defined. Pattern should be created before matching lines');
     }
+
     const result = searchItem.line.match(this.pattern);
     if (!result && this.isInverse) {
       return searchItem;

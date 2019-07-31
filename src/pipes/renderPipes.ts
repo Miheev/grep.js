@@ -1,5 +1,10 @@
 import { ConsoleColors, GrepLine } from '../models';
 
+export function showMatchCount(resultList: GrepLine[], end: () => void): number {
+  end();
+  return resultList.length;
+}
+
 export function showLineNumber(resultList: GrepLine[], end: () => void): string[][] {
   end();
   return resultList.map((resultLine) => {

@@ -1,6 +1,6 @@
 import { InputFormatter } from './inputFormatter';
 import { outputLines } from './outputLines';
-import { PatternSearch } from './PatternSearch';
+import { PatternSearch } from './patternSearch';
 
 // tslint:disable-next-line:no-unused-expression
 !async function() {

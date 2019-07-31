@@ -1,7 +1,7 @@
 import { inputFromCli, inputFromStdin } from './inputData';
 import { PipeConfig, PipeFuntion, PipeOrderedMap } from './models';
-import { caseInsensitiveSearch, inverseSearch, showMatchCount } from './pipes/regExpPipes';
-import { showLineNumber, showMatchedLineList } from './pipes/renderPipes';
+import { caseInsensitiveSearch, inverseSearch } from './pipes/regExpPipes';
+import { showLineNumber, showMatchCount, showMatchedLineList } from './pipes/renderPipes';
 import ReadStream = NodeJS.ReadStream;
 
 export class InputFormatter {
@@ -16,7 +16,7 @@ export class InputFormatter {
     InputFormatter.usageHelpOutput();
   }
 
-  static HelpDetailedOutput(): void {
+  static helpDetailedOutput(): void {
     InputFormatter.usageHelpOutput();
     console.log(`
        -i   case-insensitive search
@@ -69,6 +69,7 @@ export class InputFormatter {
     if (!isOptionSupported) {
       InputFormatter.invalidArgumentOutput(this.options[lastOptionIndex]);
       this.exit();
+      return ;
     }
 
     this.fillPipes();
@@ -90,14 +91,16 @@ export class InputFormatter {
   private async transformParams(): Promise<undefined> {
     const isHelpMode = this.argv.find((arg) => arg === '--help');
     if (isHelpMode) {
-      InputFormatter.HelpDetailedOutput();
+      InputFormatter.helpDetailedOutput();
       this.exit();
+      return ;
     }
 
     const params = this.argv.filter(arg => !this.isOption(arg));
     if (!params.length) {
       InputFormatter.usageHelpOutput();
       this.exit();
+      return ;
     }
 
     this.keyword = params[0];

@@ -31,7 +31,7 @@ export class PatternSearch {
       lineResult = { line, index };
       return this.regExpEngine.matchLine(lineResult);
     })
-      .filter((result) => Boolean(result)) as GrepLine[];
+    .filter((result) => Boolean(result)) as GrepLine[];
   }
 
   private applyOptions(): void {
