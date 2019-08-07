@@ -9,7 +9,7 @@ export function outputLines(lineList: GrepLine[], pipeline: PipeFunction[]): voi
     return;
   }
 
-  outLines.forEach((lineItem) => {
+  outLines.forEach(lineItem => {
     console.log(lineItem.join(''));
   });
 }

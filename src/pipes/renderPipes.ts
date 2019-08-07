@@ -7,7 +7,7 @@ export function showMatchCount(resultList: GrepLine[], end: () => void): number 
 
 export function showLineNumber(resultList: GrepLine[], end: () => void): string[][] {
   end();
-  return resultList.map((resultLine) => {
+  return resultList.map(resultLine => {
     return [ConsoleColors.green, resultLine.index + ':', ...showMatchedLine(resultLine)];
   });
 }
@@ -24,7 +24,7 @@ export function showMatchedLine(resultLine: GrepLine): string[] {
 
   let index = 0;
   const lineParts: string[] = [];
-  resultLine.foundIndexList.forEach((section) => {
+  resultLine.foundIndexList.forEach(section => {
     if (section[0] !== index) {
       lineParts.push(ConsoleColors.default, resultLine.line.substring(index, section[0]));
     }

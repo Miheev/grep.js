@@ -6,10 +6,10 @@ export async function inputFromCli(filePath: string): Promise<string[]> {
     const stream = createReadStream(filePath);
     let data = '';
 
-    stream.on('data', (chunk) => data += chunk);
+    stream.on('data', chunk => (data += chunk));
 
     stream.on('end', () => resolve(data.split('\n')));
-    stream.on('error', (error) => reject(error));
+    stream.on('error', error => reject(error));
   });
 }
 
@@ -26,6 +26,6 @@ export async function inputFromStdin(stdin: ReadStream): Promise<string[]> {
     });
 
     stdin.on('end', () => resolve(data.split('\n')));
-    stdin.on('error', (error) => reject(error));
+    stdin.on('error', error => reject(error));
   });
 }

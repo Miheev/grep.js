@@ -5,10 +5,8 @@ import { showLineNumber, showMatchCount, showMatchedLineList } from './pipes/ren
 import ReadStream = NodeJS.ReadStream;
 
 export class InputFormatter {
-
   static usageHelpOutput(): void {
-    console.log('Usage: grep [OPTION]... PATTERN [FILE]...\n' +
-      'Try \'grep --help\' for more information.');
+    console.log('Usage: grep [OPTION]... PATTERN [FILE]...\n' + "Try 'grep --help' for more information.");
   }
 
   static invalidArgumentOutput(option: string): void {
@@ -61,15 +59,13 @@ export class InputFormatter {
   async prepareData(): Promise<undefined> {
     await this.transformParams();
 
-    let lastOptionIndex = 0;
-    const isOptionSupported = this.options.every((option, index) => {
-      lastOptionIndex = index;
-      return this.supportedOptions.has(option);
+    const unsupportedOption: string | undefined = this.options.find(option => {
+      return !this.supportedOptions.has(option);
     });
-    if (!isOptionSupported) {
-      InputFormatter.invalidArgumentOutput(this.options[lastOptionIndex]);
+    if (unsupportedOption) {
+      InputFormatter.invalidArgumentOutput(unsupportedOption);
       this.exit();
-      return ;
+      return;
     }
 
     this.fillPipes();
@@ -89,18 +85,18 @@ export class InputFormatter {
   }
 
   private async transformParams(): Promise<undefined> {
-    const isHelpMode = this.argv.find((arg) => arg === '--help');
+    const isHelpMode = this.argv.find(arg => arg === '--help');
     if (isHelpMode) {
       InputFormatter.helpDetailedOutput();
       this.exit();
-      return ;
+      return;
     }
 
     const params = this.argv.filter(arg => !this.isOption(arg));
     if (!params.length) {
       InputFormatter.usageHelpOutput();
       this.exit();
-      return ;
+      return;
     }
 
     this.keyword = params[0];
@@ -111,12 +107,25 @@ export class InputFormatter {
       inputDataPromise = inputFromStdin(this.stdin);
     }
 
-    this.options = this.argv.filter(arg => this.isOption(arg))
+    this.options = this.argv
+      .filter(arg => this.isOption(arg))
       .map(flag => {
         return flag.length === 2 ? flag[1] : flag.substr(1).split('');
       })
       // @ts-ignore
       .flat();
+
+    /*
+    let separatedOptions: string[];
+    this.options = this.argv.reduce((acc, arg) => {
+       if (this.isOption(arg)) {
+         separatedOptions = arg.slice(1).split('');
+         acc.push(...separatedOptions);
+       }
+        return acc;
+      },
+    [] as string[]);
+    */
 
     this.textLines = await inputDataPromise;
     return;
