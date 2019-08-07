@@ -1,21 +1,24 @@
-import ReadStream = NodeJS.ReadStream;
+import { join, map, readArray } from 'event-stream';
 import { createReadStream } from 'fs';
+import ReadableStream = NodeJS.ReadableStream;
+
+import { EventStreamCallback, GrepLine } from '../src/models';
 import { InputFormatter } from '../src/inputFormatter';
+import { PipeFunction } from '../src/models';
 import { PatternSearch } from '../src/patternSearch';
 import { caseInsensitiveSearch, inverseSearch } from '../src/pipes/regExpPipes';
-import { GrepLine, PipeFunction } from '../src/models';
 
 const filePath = './spec/helpers/test-file.txt';
 
 describe('should search by provided pattern', () => {
   let exitFn = () => undefined;
   let argv: string[] = [];
-  let stream: ReadStream;
+  let stream: ReadableStream;
   let input: InputFormatter;
   let object: PatternSearch;
 
   beforeEach(() => {
-    stream = createReadStream(filePath) as unknown as ReadStream;
+    stream = createReadStream(filePath);
     input = new InputFormatter(argv, stream, exitFn);
   });
 
@@ -36,33 +39,51 @@ describe('should search by provided pattern', () => {
     expect(object.regExpEngine.isInverse).toBe(true);
   });
 
-  it('should find matches', () => {
+  it('should find matches', (itCallback) => {
     input.keyword = 'No';
-    input.textLines = ['No ', 'Yes', 'xx No'];
+    input.textStream = readArray(['No ', 'Yes', 'xx No']).pipe(join('\n')) as unknown as ReadableStream;
 
     object = new PatternSearch(input);
-    let results: GrepLine[] = object.findAll();
+    let counter = 0;
 
-    expect(results.length).toBe(2);
+    object.findAll().pipe(map((line: GrepLine, cb: EventStreamCallback) => {
+      counter++;
+      cb(null, line);
+    })).on('end', () => {
+      expect(counter).toBe(2);
+      itCallback();
+    });
   });
 
-  it('should find matches inverted and case-insensitive', () => {
+  it('should find matches inverted and case-insensitive', (itCallback) => {
     input.keyword = 'No';
-    input.textLines = ['No ', 'Yes', 'xx no'];
+    input.textStream = readArray(['No ', 'Yes', 'xx no']).pipe(join('\n')) as unknown as ReadableStream;
     input.pipes.pattern = [caseInsensitiveSearch as PipeFunction, inverseSearch as PipeFunction];
 
     object = new PatternSearch(input);
-    let results: GrepLine[] = object.findAll();
+    let counter = 0;
 
-    expect(results.length).toBe(1);
+    object.findAll().pipe(map((line: GrepLine, cb: EventStreamCallback) => {
+      counter++;
+      cb(null, line);
+    })).on('end', () => {
+      expect(counter).toBe(1);
+      itCallback();
+    });
   });
 
-  it('should return all if keyword not defined', () => {
-    input.textLines = ['No ', 'Yes', 'xx No'];
+  it('should return all if keyword not defined', (itCallback) => {
+    input.textStream = readArray(['No ', 'Yes', 'xx No']).pipe(join('\n')) as unknown as ReadableStream;
 
     object = new PatternSearch(input);
-    let results: GrepLine[] = object.findAll();
+    let counter = 0;
 
-    expect(results.length).toBe(3);
+    object.findAll().pipe(map((line: GrepLine, cb: EventStreamCallback) => {
+      counter++;
+      cb(null, line);
+    })).on('end', () => {
+      expect(counter).toBe(3);
+      itCallback();
+    });
   });
 });

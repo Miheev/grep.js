@@ -1,15 +1,20 @@
-import { GrepLine, PipeFunction } from './models';
+import { map, MapStream } from 'event-stream';
+import { EOL } from 'os';
+
+import { EventStreamCallback, PipeFunction } from './models';
 import { runPipeline } from './pipes/pipeRunner';
 
-export function outputLines(lineList: GrepLine[], pipeline: PipeFunction[]): void {
-  const outLines: number | string[][] = runPipeline(pipeline, lineList) as number | string[][];
+export function outputLines(stream: MapStream, pipeline: PipeFunction[]): void {
+  (runPipeline(pipeline, stream) as MapStream)
+    .pipe(
+      map((outLine: number | string[], cb: EventStreamCallback) => {
+        if (!Array.isArray(outLine)) {
+          cb(null, outLine + EOL);
+          return;
+        }
 
-  if (!Array.isArray(outLines)) {
-    console.log(outLines);
-    return;
-  }
-
-  outLines.forEach(lineItem => {
-    console.log(lineItem.join(''));
-  });
+        cb(null, outLine.join('') + EOL);
+      }),
+    )
+    .pipe(process.stdout);
 }

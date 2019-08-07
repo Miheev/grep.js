@@ -1,5 +1,7 @@
+import { map, MapStream, split } from 'event-stream';
+
 import { InputFormatter } from './inputFormatter';
-import { GrepLine, IRegExpEngine } from './models';
+import { EventStreamCallback, GrepLine, IRegExpEngine } from './models';
 import { runPipeline } from './pipes/pipeRunner';
 import { JsRegExpEngine } from './regExp/JsRegExpEngine';
 
@@ -21,22 +23,18 @@ export class PatternSearch {
     this.applyOptions();
   }
 
-  findAll(): GrepLine[] {
+  findAll(): MapStream {
     if (!this.input.keyword) {
       return this.currentLines();
     }
 
-    let lineResult;
-    return this.input.textLines.reduce(
-      (resultList, line, index) => {
-        lineResult = { line, index };
-        if (this.regExpEngine.matchLine(lineResult)) {
-          resultList.push(lineResult);
-        }
-        return resultList;
-      },
-      [] as GrepLine[],
-    );
+    return this.mapLines((lineResult, cb) => {
+      if (this.regExpEngine.matchLine(lineResult)) {
+        cb(null, lineResult);
+      } else {
+        cb();
+      }
+    });
   }
 
   private applyOptions(): void {
@@ -44,9 +42,17 @@ export class PatternSearch {
     this.regExpEngine.createPattern();
   }
 
-  private currentLines(): GrepLine[] {
-    return this.input.textLines.map((line, index) => {
-      return { line, index };
-    });
+  private mapLines(dataCallback: (line: GrepLine, pipeCallback: EventStreamCallback) => void): MapStream {
+    let index = -1;
+    return this.input.textStream.pipe(split()).pipe(
+      map((line: string, cb: EventStreamCallback) => {
+        index++;
+        dataCallback({ line, index }, cb);
+      }),
+    );
+  }
+
+  private currentLines(): MapStream {
+    return this.mapLines((line, cb) => cb(null, line));
   }
 }

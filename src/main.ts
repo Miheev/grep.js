@@ -8,9 +8,8 @@ import { PatternSearch } from './patternSearch';
   await input.prepareData();
 
   let searcher = new PatternSearch(input);
-  let results = searcher.findAll();
 
-  outputLines(results, input.pipes.output);
+  outputLines(searcher.findAll(), input.pipes.output);
 
   process.on('exit', () => {
     input.destroy();

@@ -1,8 +1,9 @@
-import { inputFromCli, inputFromStdin } from './inputData';
+import ReadableStream = NodeJS.ReadableStream;
+import { createReadStream } from 'fs';
+
 import { PipeConfig, PipeFunction, PipeOrderedMap } from './models';
 import { caseInsensitiveSearch, inverseSearch } from './pipes/regExpPipes';
 import { showLineNumber, showMatchCount, showMatchedLineList } from './pipes/renderPipes';
-import ReadStream = NodeJS.ReadStream;
 
 export class InputFormatter {
   static usageHelpOutput(): void {
@@ -27,20 +28,30 @@ export class InputFormatter {
   supportedOptions: Map<string, PipeConfig>;
   keyword = '';
   options: string[] = [];
-  textLines: string[] = [];
+
+  /**
+   * @see https://www.npmjs.com/package/event-stream
+   * @see https://itnext.io/using-node-js-to-read-really-really-large-files-pt-1-d2057fe76b33
+   * @see https://dev.to/itmayziii/how-to-process-epic-amounts-of-data-in-nodejs-16hl
+   * @see https://coderwall.com/p/ohjerg/read-large-text-files-in-nodejs
+   */
+  textStream: ReadableStream;
+
   pipes: PipeOrderedMap = {
     output: [],
     pattern: [],
   };
 
   private argv: string[];
-  private stdin: ReadStream;
+  private stdin: ReadableStream;
   private exitFn: (code?: number) => void;
 
-  constructor(argv: string[], stdin: ReadStream, exitFn: (code?: number) => void) {
+  constructor(argv: string[], stdin: ReadableStream, exitFn: (code?: number) => void) {
     this.argv = argv;
     this.stdin = stdin;
     this.exitFn = exitFn;
+
+    this.textStream = this.stdin;
 
     this.supportedOptions = new Map<string, PipeConfig>([
       ['i', ['pattern', 'push', caseInsensitiveSearch]],
@@ -54,6 +65,7 @@ export class InputFormatter {
     delete this.exitFn;
     delete this.stdin;
     delete this.argv;
+    delete this.textStream;
   }
 
   async prepareData(): Promise<undefined> {
@@ -84,7 +96,7 @@ export class InputFormatter {
     }
   }
 
-  private async transformParams(): Promise<undefined> {
+  private transformParams(): void {
     const isHelpMode = this.argv.find(arg => arg === '--help');
     if (isHelpMode) {
       InputFormatter.helpDetailedOutput();
@@ -100,11 +112,8 @@ export class InputFormatter {
     }
 
     this.keyword = params[0];
-    let inputDataPromise: Promise<string[]>;
     if (params[1] && params[1].length) {
-      inputDataPromise = inputFromCli(params[1]);
-    } else {
-      inputDataPromise = inputFromStdin(this.stdin);
+      this.textStream = createReadStream(params[1]);
     }
 
     this.options = this.argv
@@ -127,7 +136,6 @@ export class InputFormatter {
     [] as string[]);
     */
 
-    this.textLines = await inputDataPromise;
     return;
   }
 
